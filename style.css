@@ -1,0 +1,110 @@
+html {
+  margin: 0;
+  background-color: rgb(238, 168, 87);
+}
+
+body {
+  margin: auto;
+  width: 330px;
+}
+
+#frame {
+  margin-top: 10vh;
+  background-color: hsl(0, 0%, 45%);
+  border-radius: 25px;
+  width: 330px;
+  height: 430px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 5px 5px hsl(0, 0%, 38%),
+              9px 9px 18px rgba(0, 0, 0, 0.5);
+}
+
+#screen {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  font-family: monospace;
+  font-size: 42px;
+  border-radius: 15px;
+  background-color: hsl(80, 40%, 80%);
+  color: rgba(0, 0, 0, 0.6);
+  height: 75px;
+  width: 293px;
+  margin: 0 5px 5px 5px;
+  box-shadow: inset 3px 3px hsl(0, 0%, 38%),
+              inset 5px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+#screen p {
+  margin: 0px 5px 0px 0px;
+}
+
+#buttons {
+  margin: 15px 0 0 -1.5px;
+  font-family: sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  display: grid;
+  grid-template: repeat(5, 60px) / repeat(4, 75px);
+}
+
+#buttons > * {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  margin: 5px;
+  transition: filter 0.2s,
+              transform 0.1s,
+              box-shadow 0.1s;
+}
+
+.basic {
+  background-color: hsl(0, 0%, 80%);
+  box-shadow: 3px 3px hsl(0, 0%, 58%),
+              3px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+.special, .operator {
+  background-color: hsl(200, 50%, 80%);
+  box-shadow: 3px 3px hsl(200, 20%, 58%),
+              3px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+#clear {
+  background-color: hsl(5, 50%, 80%);
+  box-shadow: 3px 3px hsl(5, 20%, 58%),
+              3px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+#buttons p {
+  color: transparent;
+  text-shadow: 0.5px 0.5px 0.5px rgba(255, 255, 255, 0.4);
+  -webkit-background-clip: text;
+     -moz-background-clip: text;
+          background-clip: text;
+}
+
+.basic p {
+  background-color: hsl(0, 0%, 30%);
+}
+
+.special p, .operator p {
+  background-color: hsl(200, 50%, 30%);
+}
+
+#clear p {
+  background-color: hsl(5, 50%, 30%);
+}
+
+#buttons > *:hover {
+  cursor: pointer;
+  filter: brightness(1.1);
+}
+
+#buttons > *:active {
+  transform: translate(3px, 3px);
+}
