@@ -18,8 +18,10 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 5px 5px hsl(0, 0%, 38%),
-              9px 9px 18px rgba(0, 0, 0, 0.5);
+  box-shadow: 
+              3px 3px hsl(0, 0%, 38%),
+              6px 6px hsl(0, 0%, 38%),
+              10px 10px 20px rgba(0, 0, 0, 0.5);
 }
 
 #screen {
@@ -38,49 +40,79 @@ body {
               inset 5px 5px 5px rgba(0, 0, 0, 0.3);
 }
 
-#screen p {
-  margin: 0px 5px 0px 0px;
-}
-
 #buttons {
   margin: 15px 0 0 -1.5px;
-  font-family: sans-serif;
-  font-size: 18px;
-  font-weight: bold;
   display: grid;
   grid-template: repeat(5, 60px) / repeat(4, 75px);
 }
 
-#buttons > * {
+button {
+  position: relative;
+  border: none;
+  border-radius: 15px;
+  margin: 5px;
+  padding: 0;
+  background-color: transparent;
+  font-family: sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  transition: filter 0.2s;
+}
+
+.front {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
   border-radius: 15px;
-  margin: 5px;
-  transition: filter 0.2s,
-              transform 0.1s,
-              box-shadow 0.1s;
+  z-index: 1;
+  transition: transform 20ms;
 }
 
-.basic {
+.basic .front {
   background-color: hsl(0, 0%, 80%);
-  box-shadow: 3px 3px hsl(0, 0%, 58%),
-              3px 3px 3px rgba(0, 0, 0, 0.3);
 }
 
-.special, .operator {
+.operator .front {
   background-color: hsl(200, 50%, 80%);
-  box-shadow: 3px 3px hsl(200, 20%, 58%),
-              3px 3px 3px rgba(0, 0, 0, 0.3);
 }
 
-#clear {
+#clear .front {
   background-color: hsl(5, 50%, 80%);
-  box-shadow: 3px 3px hsl(5, 20%, 58%),
-              3px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+.edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3),
+              inset -1px -1px 3px rgba(0, 0, 0, 0.9);
+}
+
+.basic .edge {
+  background-color: hsl(0, 0%, 58%);
+}
+
+.operator .edge {
+  background-color: hsl(200, 20%, 58%);
+}
+
+#clear .edge {
+  background-color: hsl(5, 20%, 58%);
+}
+
+#screen p {
+  margin: 0px 5px 0px 0px;
 }
 
 #buttons p {
+  line-height: 50px;
   color: transparent;
   text-shadow: 0.5px 0.5px 0.5px rgba(255, 255, 255, 0.4);
   -webkit-background-clip: text;
@@ -92,7 +124,7 @@ body {
   background-color: hsl(0, 0%, 30%);
 }
 
-.special p, .operator p {
+.operator p {
   background-color: hsl(200, 50%, 30%);
 }
 
@@ -100,11 +132,15 @@ body {
   background-color: hsl(5, 50%, 30%);
 }
 
-#buttons > *:hover {
+button:hover {
   cursor: pointer;
   filter: brightness(1.1);
 }
 
-#buttons > *:active {
-  transform: translate(3px, 3px);
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.front:active {
+  transform: translate(2px, 2px);
 }
