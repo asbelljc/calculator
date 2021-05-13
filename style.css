@@ -18,7 +18,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 
+  box-shadow: inset -3px -3px 9px hsl(0, 0%, 38%),
               3px 3px hsl(0, 0%, 38%),
               6px 6px hsl(0, 0%, 38%),
               10px 10px 20px rgba(0, 0, 0, 0.5);
@@ -73,14 +73,17 @@ button {
 
 .basic .front {
   background-color: hsl(0, 0%, 80%);
+  box-shadow: inset -2px -2px 8px hsl(0, 0%, 58%);
 }
 
 .operator .front {
   background-color: hsl(200, 50%, 80%);
+  box-shadow: inset -2px -2px 8px hsl(200, 20%, 58%);
 }
 
 #clear .front {
   background-color: hsl(5, 50%, 80%);
+  box-shadow: inset -2px -2px 8px hsl(5, 20%, 58%);
 }
 
 .edge {
