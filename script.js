@@ -93,11 +93,33 @@ buttons.addEventListener(click, e => {
       break;
     case is("sign"):
       break;
-    case is("root"):
-      break;
     case is("power"):
+      break;
+    case is("delete"):
       break;
     case is("clear"):
       break;
     }
 });
+
+// 1. check if DIGIT/POINT, OPERATOR, SIGN, DELETE, or CLEAR pressed
+
+// 2. if DIGIT/POINT
+//    --if preceded by digit/point, shownValue += DIGIT/POINT,
+//        else shownValue = "" += DIGIT/POINT
+//    --must ignore point if repeated before new number entry
+
+// 3. if OPERATOR
+//    --if an operation is already waiting to be evaluated, shownValue = [result]
+//    --store the OPERATOR, store current shownValue as num1 and await second number
+//    --
+
+// 4. if SIGN
+//    --if shownValue != 0, shownValue = -shownValue
+
+// 5. if DELETE
+//    --if shownValue.length = 1, shownValue = 0,
+//        else shownValue.slice(0, -1)
+
+// 6. if CLEAR
+//    --

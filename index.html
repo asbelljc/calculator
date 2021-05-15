@@ -8,22 +8,22 @@
 </head>
 <body>
   <div id="frame">
-    <div id="screen"><p id="value"></p></div>
+    <div id="screen"><p id="value">0</p></div>
     <div id="buttons">
       <button id="sign" class="operator">
         <div class="front"><p>+/-</p></div>
-        <div class="edge"></div>
-      </button>
-      <button id="root" class="operator">
-        <div class="front"><p><sup>y</sup>&#8730x</p></div>
         <div class="edge"></div>
       </button>
       <button id="power" class="operator">
         <div class="front"><p>x<sup>y</sup></p></div>
         <div class="edge"></div>
       </button>
+      <button id="delete">
+        <div class="front"><p>&#9003</p></div>
+        <div class="edge"></div>
+      </button>
       <button id="clear">
-        <div class="front"><p><sup>CE</sup>/C</p></div>
+        <div class="front"><p>C</p></div>
         <div class="edge"></div>
       </button>
       <button id="7" class="basic">
@@ -103,9 +103,9 @@
     </div>
     <div id="meanings">
       <div id="n-means">+/-</div>
-      <div id="r-means"><sup>y</sup>&#8730x</div>
       <div id="p-means">x<sup>y</sup></div>
-      <div id="c-means"><sup>CE</sup>/C</div>
+      <div id="backspace-means">&#9003</div>
+      <div id="c-means">C</div>
       <div id="slash-means">&#247</div>
       <div id="x-means">&#215</div>
     </div>
