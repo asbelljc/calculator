@@ -23,17 +23,15 @@ function root(a, b) {
 }
 
 function operate(operator, num1, num2) {
+  num1 = parseInt(num1);
+  num2 = parseInt(num2);
   return operator(num1, num2);
 }
 
-function is(id) {
-  return e.target.id === id ||
-         e.target.parentNode.id === id ||
-         e.target.parentNode.parentNode.id === id ||
-         e.target.parentNode.parentNode.parentNode.id === id;
-}
-
-let shownValue = document.getElementById("value");
+let num1;
+let num2;
+let operator;
+let screen = document.getElementById("screen").firstChild;
 
 const buttons = document.getElementById("buttons");
 // const zero = document.getElementById("0");
@@ -57,47 +55,117 @@ const buttons = document.getElementById("buttons");
 // const power = document.getElementById("power");
 // const clear = document.getElementById("clear");
 
-buttons.addEventListener(click, e => {
-  switch(true) {
-    case is("0"):
+buttons.addEventListener("click", e => {
+  switch(
+    e.target.id ||
+    e.target.parentNode.id ||
+    e.target.parentNode.parentNode.id ||
+    e.target.parentNode.parentNode.parentNode.id
+  ) {
+    case "0":
+      if (screen.textContent !== "0") {
+        screen.textContent += "0";
+      }
       break;
-    case is("1"):
+    case "1":
+      if (screen.textContent === "0") {
+        screen.textContent = "1";
+      } else {
+        screen.textContent += "1";
+      }
       break;
-    case is("2"):
+    case "2":
+      if (screen.textContent === "0") {
+        screen.textContent = "2";
+      } else {
+        screen.textContent += "2";
+      }
       break;
-    case is("3"):
+    case "3":
+      if (screen.textContent === "0") {
+        screen.textContent = "3";
+      } else {
+        screen.textContent += "3";
+      }
       break;
-    case is("4"):
+    case "4":
+      if (screen.textContent === "0") {
+        screen.textContent = "4";
+      } else {
+        screen.textContent += "4";
+      }
       break;
-    case is("5"):
+    case "5":
+      if (screen.textContent === "0") {
+        screen.textContent = "5";
+      } else {
+        screen.textContent += "5";
+      }
       break;
-    case is("6"):
+    case "6":
+      if (screen.textContent === "0") {
+        screen.textContent = "6";
+      } else {
+        screen.textContent += "6";
+      }
       break;
-    case is("7"):
+    case "7":
+      if (screen.textContent === "0") {
+        screen.textContent = "7";
+      } else {
+        screen.textContent += "7";
+      }
       break;
-    case is("8"):
+    case "8":
+      if (screen.textContent === "0") {
+        screen.textContent = "8";
+      } else {
+        screen.textContent += "8";
+      }
       break;
-    case is("9"):
+    case "9":
+      if (screen.textContent === "0") {
+        screen.textContent = "9";
+      } else {
+        screen.textContent += "9";
+      }
       break;
-    case is("point"):
+    case "point":
+      if (!screen.textContent.includes(".")) {
+        screen.textContent += ".";
+      }
       break;
-    case is("equals"):
+    case "equals":
+      if (!num2) {
+        num2 = screen.textContent;
+      }
+      screen.textContent = operate(operator, num1, num2);
+      num1 = screen.textContent;
       break;
-    case is("add"):
+    case "add":
+      if (!num1) {
+        num1 = screen.textContent;
+        operator = add;
+      } else {
+        num2 = screen.textContent;
+        screen.textContent = operate(operator, num1, num2);
+        num1 = screen.textContent;
+        operator = add;
+      }
       break;
-    case is("subtract"):
+    case "subtract":
       break;
-    case is("multiply"):
+    case "multiply":
       break;
-    case is("divide"):
+    case "divide":
       break;
-    case is("sign"):
+    case "sign":
       break;
-    case is("power"):
+    case "power":
       break;
-    case is("delete"):
+    case "delete":
       break;
-    case is("clear"):
+    case "clear":
       break;
     }
 });
@@ -105,21 +173,21 @@ buttons.addEventListener(click, e => {
 // 1. check if DIGIT/POINT, OPERATOR, SIGN, DELETE, or CLEAR pressed
 
 // 2. if DIGIT/POINT
-//    --if preceded by digit/point, shownValue += DIGIT/POINT,
-//        else shownValue = "" += DIGIT/POINT
+//    --if preceded by digit/point, screen.textContent += DIGIT/POINT,
+//        else screen.textContent = "" += DIGIT/POINT
 //    --must ignore point if repeated before new number entry
 
 // 3. if OPERATOR
-//    --if an operation is already waiting to be evaluated, shownValue = [result]
-//    --store the OPERATOR, store current shownValue as num1 and await second number
-//    --
+//    --if an operation is already waiting to be evaluated, screen.textContent = [result]
+//    --store the OPERATOR, store current screen.textContent as num1 and await second number
+//
 
 // 4. if SIGN
-//    --if shownValue != 0, shownValue = -shownValue
+//    --if screen.textContent != 0, screen.textContent = -screen.textContent
 
 // 5. if DELETE
-//    --if shownValue.length = 1, shownValue = 0,
-//        else shownValue.slice(0, -1)
+//    --if screen.textContent.length = 1, screen.textContent = 0,
+//        else screen.textContent.slice(0, -1)
 
 // 6. if CLEAR
 //    --
