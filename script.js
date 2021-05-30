@@ -56,12 +56,7 @@ const buttons = document.getElementById("buttons");
 // const clear = document.getElementById("clear");
 
 buttons.addEventListener("click", e => {
-  switch(
-    e.target.id ||
-    e.target.parentNode.id ||
-    e.target.parentNode.parentNode.id ||
-    e.target.parentNode.parentNode.parentNode.id
-  ) {
+  switch (e.target.closest("button").id) {
     case "0":
       if (screen.textContent !== "0") {
         screen.textContent += "0";
