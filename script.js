@@ -18,20 +18,17 @@ function power(a, b) {
   return a ** b;
 }
 
-function root(a, b) {
-  return a ** (1 / b);
-}
-
 function operate(operator, num1, num2) {
   num1 = parseInt(num1);
   num2 = parseInt(num2);
   return operator(num1, num2);
 }
 
-let num1;
-let num2;
-let operator;
+let firstOperand;
+let secondOperand;
+let currentOperator;
 let screen = document.getElementById("screen").firstChild;
+let needsRefresh = false;
 
 const buttons = document.getElementById("buttons");
 // const zero = document.getElementById("0");
@@ -63,64 +60,73 @@ buttons.addEventListener("click", e => {
       }
       break;
     case "1":
-      if (screen.textContent === "0") {
+      if (screen.textContent === "0" || needsRefresh) {
         screen.textContent = "1";
+        needsRefresh = false;
       } else {
         screen.textContent += "1";
       }
       break;
     case "2":
-      if (screen.textContent === "0") {
+      if (screen.textContent === "0" || needsRefresh) {
         screen.textContent = "2";
+        needsRefresh = false;
       } else {
         screen.textContent += "2";
       }
       break;
     case "3":
-      if (screen.textContent === "0") {
+      if (screen.textContent === "0" || needsRefresh) {
         screen.textContent = "3";
+        needsRefresh = false;
       } else {
         screen.textContent += "3";
       }
       break;
     case "4":
-      if (screen.textContent === "0") {
+      if (screen.textContent === "0" || needsRefresh) {
         screen.textContent = "4";
+        needsRefresh = false;
       } else {
         screen.textContent += "4";
       }
       break;
     case "5":
-      if (screen.textContent === "0") {
+      if (screen.textContent === "0" || needsRefresh) {
         screen.textContent = "5";
+        needsRefresh = false;
       } else {
         screen.textContent += "5";
       }
       break;
     case "6":
-      if (screen.textContent === "0") {
+      if (screen.textContent === "0" || needsRefresh) {
         screen.textContent = "6";
+        needsRefresh = false;
       } else {
         screen.textContent += "6";
       }
       break;
     case "7":
-      if (screen.textContent === "0") {
+      if (screen.textContent === "0" || needsRefresh) {
         screen.textContent = "7";
+        needsRefresh = false;
       } else {
         screen.textContent += "7";
       }
       break;
     case "8":
-      if (screen.textContent === "0") {
+      if (screen.textContent === "0" || needsRefresh) {
         screen.textContent = "8";
+        needsRefresh = false;
       } else {
         screen.textContent += "8";
       }
       break;
     case "9":
-      if (screen.textContent === "0") {
+      if (screen.textContent === "0" || needsRefresh) {
         screen.textContent = "9";
+        needsRefresh = false;
       } else {
         screen.textContent += "9";
       }
@@ -131,28 +137,60 @@ buttons.addEventListener("click", e => {
       }
       break;
     case "equals":
-      if (!num2) {
-        num2 = screen.textContent;
+      if (!secondOperand) {
+        secondOperand = screen.textContent;
       }
-      screen.textContent = operate(operator, num1, num2);
-      num1 = screen.textContent;
+      screen.textContent = operate(currentOperator, firstOperand, secondOperand);
+      firstOperand = screen.textContent;
+      needsRefresh = true;
       break;
     case "add":
-      if (!num1) {
-        num1 = screen.textContent;
-        operator = add;
+      if (!firstOperand) {
+        firstOperand = screen.textContent;
+        currentOperator = add;
       } else {
-        num2 = screen.textContent;
-        screen.textContent = operate(operator, num1, num2);
-        num1 = screen.textContent;
-        operator = add;
+        secondOperand = screen.textContent;
+        screen.textContent = operate(currentOperator, firstOperand, secondOperand);
+        firstOperand = screen.textContent;
+        currentOperator = add;
       }
+      needsRefresh = true;
       break;
     case "subtract":
+      if (!firstOperand) {
+        firstOperand = screen.textContent;
+        currentOperator = subtract;
+      } else {
+        secondOperand = screen.textContent;
+        screen.textContent = operate(currentOperator, firstOperand, secondOperand);
+        firstOperand = screen.textContent;
+        currentOperator = subtract;
+      }
+      needsRefresh = true;
       break;
     case "multiply":
+      if (!firstOperand) {
+        firstOperand = screen.textContent;
+        currentOperator = multiply;
+      } else {
+        secondOperand = screen.textContent;
+        screen.textContent = operate(currentOperator, firstOperand, secondOperand);
+        firstOperand = screen.textContent;
+        currentOperator = multiply;
+      }
+      needsRefresh = true;
       break;
     case "divide":
+      if (!firstOperand) {
+        firstOperand = screen.textContent;
+        currentOperator = divide;
+      } else {
+        secondOperand = screen.textContent;
+        screen.textContent = operate(currentOperator, firstOperand, secondOperand);
+        firstOperand = screen.textContent;
+        currentOperator = divide;
+      }
+      needsRefresh = true;
       break;
     case "sign":
       break;
