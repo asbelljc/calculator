@@ -53,6 +53,7 @@
 //   return {
 //     firstOperand,
 //     secondOperand,
+//     currentOperator,
 //     evaluate
 //   };
 // })();
@@ -80,16 +81,23 @@
   };
 
   const lolClear = () => {
+    function appendL() {
+      display(`${display()}L`)
+    }
+    function appendO() {
+      display(`${display()}O`);
+    }
+
     display("L");
-    setTimeout(display(`${display()}O`), 100);
-    setTimeout(display(`${display()}L`), 200);
-    setTimeout(display(`${display()}O`), 300);
-    setTimeout(display(`${display()}L`), 400);
-    setTimeout(display(`${display()}O`), 500);
-    setTimeout(display(`${display()}L`), 600);
-    setTimeout(display(`${display()}O`), 700);
-    setTimeout(display(`${display()}L`), 800);
-    setTimeout(clear(), 900);
+    setTimeout(appendO, 100);
+    setTimeout(appendL, 200);
+    setTimeout(appendO, 300);
+    setTimeout(appendL, 400);
+    setTimeout(appendO, 500);
+    setTimeout(appendL, 600);
+    setTimeout(appendO, 700);
+    setTimeout(appendL, 800);
+    setTimeout(clear, 1300);
   };
 
   const appendDigit = (d) => {
