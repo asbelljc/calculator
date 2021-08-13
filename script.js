@@ -1,4 +1,4 @@
-// const ops = (() => {
+const ops = (() => {
   let currentOperator;
   let firstOperand = "0";
   let secondOperand = null;
@@ -32,39 +32,39 @@
   };
 
   const evaluate = () => {
-    if (secondOperand !== null) {
-      firstOperand = Number(firstOperand);
-      secondOperand = Number(secondOperand);
-      switch (currentOperator) {
+    if (ops.secondOperand !== null) {
+      ops.firstOperand = Number(ops.firstOperand);
+      ops.secondOperand = Number(ops.secondOperand);
+      switch (ops.currentOperator) {
         case "add":
-          return add(firstOperand, secondOperand);
+          return add(ops.firstOperand, ops.secondOperand);
         case "subtract":
-          return subtract(firstOperand, secondOperand);
+          return subtract(ops.firstOperand, ops.secondOperand);
         case "multiply":
-          return multiply(firstOperand, secondOperand);
+          return multiply(ops.firstOperand, ops.secondOperand);
         case "divide":
-          return divide(firstOperand, secondOperand);
+          return divide(ops.firstOperand, ops.secondOperand);
         case "power":
-          return power(firstOperand, secondOperand);
+          return power(ops.firstOperand, ops.secondOperand);
       }
     }
   };
 
-//   return {
-//     firstOperand,
-//     secondOperand,
-//     currentOperator,
-//     evaluate
-//   };
-// })();
+  return {
+    firstOperand,
+    secondOperand,
+    currentOperator,
+    evaluate
+  };
+})();
 
-// const screen = (() => {
+const screen = (() => {
   let needsRefresh = true;
   let operand1Shown = true;
   let operand1Active = true;
   
-  const display = (string) => {
-    if (string) {
+  const display = (string = null) => {
+    if (string !== null) {
       document.getElementById("screen").firstChild.innerText = string;
     } else {
       return document.getElementById("screen").firstChild.innerText;
@@ -73,8 +73,8 @@
 
   const clear = () => {
     display("0");
-    /*ops.*/firstOperand = display();
-    /*ops.*/secondOperand = null;
+    ops.firstOperand = display();
+    ops.secondOperand = null;
     needsRefresh = true;
     operand1Active = true;
     operand1Shown = true;
@@ -113,10 +113,10 @@
 
     function stepTwo() {
       if (operand1Active) {
-        /*ops.*/firstOperand = display();
-        /*ops.*/secondOperand = null;
+        ops.firstOperand = display();
+        ops.secondOperand = null;
       } else {
-        /*ops.*/secondOperand = display();
+        ops.secondOperand = display();
         operand1Shown = false;
       }
     }
@@ -139,10 +139,10 @@
 
     function stepTwo() {
       if (operand1Active) {
-        /*ops.*/firstOperand = display().slice(0, -1);
-        /*ops.*/secondOperand = null;
+        ops.firstOperand = display().slice(0, -1);
+        ops.secondOperand = null;
       } else {
-        /*ops.*/secondOperand = display().slice(0, -1);
+        ops.secondOperand = display().slice(0, -1);
         operand1Shown = false;
       }
     }
@@ -174,9 +174,9 @@
 
     function stepTwo() {
       if (operand1Shown) {
-        /*ops.*/firstOperand = display();
+        ops.firstOperand = display();
       } else {
-        /*ops.*/secondOperand = display();
+        ops.secondOperand = display();
       }
     }
 
@@ -197,9 +197,9 @@
 
     function stepTwo() {
       if (operand1Shown) {
-        /*ops.*/firstOperand = display();
+        ops.firstOperand = display();
       } else {
-        /*ops.*/secondOperand = display();
+        ops.secondOperand = display();
       }
     }
 
@@ -209,15 +209,15 @@
   const handleOperator = (operator) => {
     function stepOne(nextStep) {
       if (!operand1Shown) {
-        if (/*ops.*/evaluate() === null) {
+        if (ops.evaluate() === null) {
           lolClear();
           return;
         } else { 
-          display(/*ops.*/evaluate());
-          /*ops.*/firstOperand = display();
+          display(ops.evaluate());
+          ops.firstOperand = display();
         }
       } else if (operand1Active) {
-        /*ops.*/secondOperand = null;
+        ops.secondOperand = null;
       }
       nextStep();
     }
@@ -226,18 +226,18 @@
       operand1Shown = true;
       operand1Active = false;
       needsRefresh = true;
-      /*ops.*/currentOperator = operator;
+      ops.currentOperator = operator;
     }
 
     stepOne(stepTwo);
   };
 
   const EQUALS = () => {
-    if (/*ops.*/evaluate() === null) {
+    if (ops.evaluate() === null) {
       lolClear();
     } else {
-      display(/*ops.*/evaluate());
-      /*ops.*/firstOperand = display();
+      display(ops.evaluate());
+      ops.firstOperand = display();
       needsRefresh = true;
       operand1Active = true;
       operand1Shown = true;
@@ -276,7 +276,11 @@
 
   const buttons = document.getElementById("buttons");
   buttons.addEventListener("click", events);
-// })();
+
+  return {
+    display
+  };
+})();
 
 // let firstOperand;
 // let secondOperand;
