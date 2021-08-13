@@ -1,4 +1,4 @@
-const ops = (() => {
+// const ops = (() => {
   let currentOperator;
   let firstOperand = "0";
   let secondOperand = null;
@@ -33,33 +33,31 @@ const ops = (() => {
 
   const evaluate = () => {
     if (secondOperand) {
+      firstOperand = parseInt(firstOperand);
+      secondOperand = parseInt(secondOperand);
       switch (currentOperator) {
         case "add":
-          add(firstOperand, SecondOperand);
-          break;
+          return add(firstOperand, secondOperand);
         case "subtract":
-          subtract(firstOperand, secondOperand);
-          break;
+          return subtract(firstOperand, secondOperand);
         case "multiply":
-          multiply(firstOperand, secondOperand);
-          break;
+          return multiply(firstOperand, secondOperand);
         case "divide":
-          divide(firstOperand, secondOperand);
-          break;
+          return divide(firstOperand, secondOperand);
         case "power":
-          power(firstOperand, secondOperand);
+          return power(firstOperand, secondOperand);
       }
     }
   };
 
-  return {
-    firstOperand,
-    secondOperand,
-    evaluate
-  };
-})();
+//   return {
+//     firstOperand,
+//     secondOperand,
+//     evaluate
+//   };
+// })();
 
-const screen = (() => {
+// const screen = (() => {
   let needsRefresh = true;
   let operand1Shown = true;
   let operand1Active = true;
@@ -74,8 +72,8 @@ const screen = (() => {
 
   const clear = () => {
     display("0");
-    ops.firstOperand = display();
-    ops.secondOperand = null;
+    /*ops.*/firstOperand = display();
+    /*ops.*/secondOperand = null;
     needsRefresh = true;
     operand1Active = true;
     operand1Shown = true;
@@ -107,10 +105,10 @@ const screen = (() => {
 
     function stepTwo() {
       if (operand1Active) {
-        ops.firstOperand = display();
-        ops.secondOperand = null;
+        /*ops.*/firstOperand = display();
+        /*ops.*/secondOperand = null;
       } else {
-        ops.secondOperand = display();
+        /*ops.*/secondOperand = display();
         operand1Shown = false;
       }
     }
@@ -133,10 +131,10 @@ const screen = (() => {
 
     function stepTwo() {
       if (operand1Active) {
-        ops.firstOperand = display().slice(0, -1);
-        ops.secondOperand = null;
+        /*ops.*/firstOperand = display().slice(0, -1);
+        /*ops.*/secondOperand = null;
       } else {
-        ops.secondOperand = display().slice(0, -1);
+        /*ops.*/secondOperand = display().slice(0, -1);
         operand1Shown = false;
       }
     }
@@ -168,9 +166,9 @@ const screen = (() => {
 
     function stepTwo() {
       if (operand1Shown) {
-        ops.firstOperand = display();
+        /*ops.*/firstOperand = display();
       } else {
-        ops.secondOperand = display();
+        /*ops.*/secondOperand = display();
       }
     }
 
@@ -188,15 +186,15 @@ const screen = (() => {
   const handleOperator = (operator) => {
     function stepOne(nextStep) {
       if (!operand1Shown) {
-        if (ops.evaluate() === null) {
+        if (/*ops.*/evaluate() === null) {
           lolClear();
           return;
         } else { 
-          display(ops.evaluate());
-          ops.firstOperand = display();
+          display(/*ops.*/evaluate());
+          /*ops.*/firstOperand = display();
         }
       } else if (operand1Active) {
-        ops.secondOperand = null;
+        /*ops.*/secondOperand = null;
       }
       nextStep();
     }
@@ -205,18 +203,18 @@ const screen = (() => {
       operand1Shown = true;
       operand1Active = false;
       needsRefresh = true;
-      ops.currentOperator = operator;
+      /*ops.*/currentOperator = operator;
     }
 
     stepOne(stepTwo);
   };
 
-  const evaluate = () => {
-    if (ops.evaluate === null) {
+  const EQUALS = () => {
+    if (/*ops.*/evaluate === null) {
       lolClear();
     } else {
-      display(ops.evaluate());
-      ops.firstOperand = display();
+      display(/*ops.*/evaluate());
+      /*ops.*/firstOperand = display();
       needsRefresh = true;
       operand1Active = true;
       operand1Shown = true;
@@ -225,7 +223,7 @@ const screen = (() => {
 
   const events = (e) => {
     if (e.target.closest("button").id === "equals") {
-      evaluate();
+      EQUALS();
       return;
     }
     if (e.target.closest("button").id === "clear") {
@@ -255,7 +253,7 @@ const screen = (() => {
 
   const buttons = document.getElementById("buttons");
   buttons.addEventListener("click", events);
-})();
+// })();
 
 // let firstOperand;
 // let secondOperand;
