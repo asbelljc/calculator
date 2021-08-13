@@ -73,12 +73,12 @@ button {
   transition: transform 50ms;
 }
 
-.basic .front {
+.gray-btn .front {
   background-color: hsl(0, 0%, 80%);
   box-shadow: inset -2px -2px 8px hsl(0, 0%, 58%);
 }
 
-.operator .front {
+.blue-btn .front {
   background-color: hsl(200, 50%, 80%);
   box-shadow: inset -2px -2px 8px hsl(200, 20%, 58%);
 }
@@ -105,11 +105,11 @@ button {
               inset -1px -1px 3px rgba(0, 0, 0, 0.9);
 }
 
-.basic .edge {
+.gray-btn .edge {
   background-color: hsl(0, 0%, 58%);
 }
 
-.operator .edge {
+.blue-btn .edge {
   background-color: hsl(200, 20%, 58%);
 }
 
@@ -134,11 +134,11 @@ button {
           background-clip: text;
 }
 
-.basic p {
+.gray-btn p {
   background-color: hsl(0, 0%, 30%);
 }
 
-.operator p {
+.blue-btn p {
   background-color: hsl(200, 50%, 30%);
 }
 

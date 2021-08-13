@@ -32,7 +32,7 @@
   };
 
   const evaluate = () => {
-    if (secondOperand) {
+    if (secondOperand !== null) {
       firstOperand = Number(firstOperand);
       secondOperand = Number(secondOperand);
       switch (currentOperator) {
@@ -184,11 +184,26 @@
   };
 
   const toggleSign = () => {
-    if (display()[0] !== "-") {
-      display(`-${display()}`);
-    } else {
-      display(display().slice(1));
+    function stepOne(nextStep) {
+      if (display() !== "0") {
+        if (display()[0] !== "-") {
+          display(`-${display()}`);
+        } else {
+          display(display().slice(1));
+        }
+        nextStep();
+      }
     }
+
+    function stepTwo() {
+      if (operand1Shown) {
+        /*ops.*/firstOperand = display();
+      } else {
+        /*ops.*/secondOperand = display();
+      }
+    }
+
+    stepOne(stepTwo);
   };
 
   const handleOperator = (operator) => {
@@ -218,7 +233,7 @@
   };
 
   const EQUALS = () => {
-    if (/*ops.*/evaluate === null) {
+    if (/*ops.*/evaluate() === null) {
       lolClear();
     } else {
       display(/*ops.*/evaluate());
