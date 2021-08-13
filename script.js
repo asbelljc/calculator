@@ -1,107 +1,31 @@
-// function add(a, b) {
-//   return a + b;
-// }
-
-// function subtract(a, b) {
-//   return a - b;
-// }
-
-// function multiply(a, b) {
-//   return a * b;
-// }
-
-// function divide(a, b) {
-//   if (b === 0) {
-//     return null;
-//   } else {
-//     return a / b;
-//   }
-// }
-
-// function power(a, b) {
-//   if (a === 0 && b < 0) {
-//     return null;
-//   } else {
-//     return a ** b;
-//   }
-// }
-
-// function operate(operator, num1, num2) {
-//   num1 = parseInt(num1);
-//   num2 = parseInt(num2);
-//   return operator(num1, num2);
-// }
-const eventHandler = (() => {
-  const hitEquals = new Event("hitEquals");
-  const hitClear = new Event("hitClear");
-  const hitDelete = new Event("hitDelete");
-  const hitDigit = new Event("hitDigit", { detail: e.target.id });
-  const hitPoint = new Event("hitPoint");
-  const hitOperator = new Event("hitOperator", { detail: e.target.id });
-  const hitSign = new Event("hitSign");
-
-  function emitEvent(e) {
-    if (e.target.closest("button").id === "equals") {
-      document.dispatchEvent(hitEquals);
-      return;
-    }
-    if (e.target.closest("button").id === "clear") {
-      document.dispatchEvent(hitClear);
-      return;
-    }
-    if (e.target.closest("button").id === "delete") {
-      document.dispatchEvent(hitDelete);
-      return;
-    }
-    if (e.target.closest("button").classList.contains("digit")) {
-      document.dispatchEvent(hitDigit);
-      return;
-    }
-    if (e.target.closest("button").id === "point") {
-      document.dispatchEvent(hitPoint);
-      return;
-    }
-    if (e.target.closest("button").classList.contains("operator")) {
-      document.dispatchEvent(hitOperator);
-      return;
-    }
-    if (e.target.closest("button").id === "sign") {
-      document.dispatchEvent(hitSign);
-    }
-  }
-
-  const buttons = document.getElementById("buttons");
-  buttons.addEventListener("click", emitEvent);
-})();
-
 const ops = (() => {
-  let _currentOperator;
+  let currentOperator;
   let firstOperand = "0";
   let secondOperand = null;
 
-  const _add = (a, b) => {
+  const add = (a, b) => {
     return a + b;
   };
 
-  const _subtract = (a, b) => {
+  const subtract = (a, b) => {
     return a - b;
   };
 
-  const _multiply = (a, b) => {
+  const multiply = (a, b) => {
     return a * b;
   };
 
-  const _divide = (a, b) => {
+  const divide = (a, b) => {
     if (b === 0) {
-      screen.lolClear();
+      return null;
     } else {
       return a / b;
     }
   };
 
-  const _power = (a, b) => {
+  const power = (a, b) => {
     if (a === 0 && b < 0) {
-      screen.lolClear();
+      return null;
     } else {
       return a ** b;
     }
@@ -109,13 +33,24 @@ const ops = (() => {
 
   const evaluate = () => {
     if (secondOperand) {
-      return _currentOperator(firstOperand, secondOperand);
+      switch (currentOperator) {
+        case "add":
+          add(firstOperand, SecondOperand);
+          break;
+        case "subtract":
+          subtract(firstOperand, secondOperand);
+          break;
+        case "multiply":
+          multiply(firstOperand, secondOperand);
+          break;
+        case "divide":
+          divide(firstOperand, secondOperand);
+          break;
+        case "power":
+          power(firstOperand, secondOperand);
+      }
     }
   };
-
-  document.addEventListener("hitOperator2", (e) => {
-    _currentOperator = ops[`_${e.detail}`];
-  });
 
   return {
     firstOperand,
@@ -125,14 +60,12 @@ const ops = (() => {
 })();
 
 const screen = (() => {
-  let _needsRefresh = true;
-  let _operand1Shown = true;
-  let _operand1Active = true;
+  let needsRefresh = true;
+  let operand1Shown = true;
+  let operand1Active = true;
   
-  const _display = (string, additive) => {
-    if (string && additive) {
-      document.getElementById("screen").firstChild.innerText += string;
-    } else if (string) {
+  const display = (string) => {
+    if (string) {
       document.getElementById("screen").firstChild.innerText = string;
     } else {
       return document.getElementById("screen").firstChild.innerText;
@@ -140,45 +73,45 @@ const screen = (() => {
   };
 
   const clear = () => {
-    _display("0");
-    ops.firstOperand = _display();
+    display("0");
+    ops.firstOperand = display();
     ops.secondOperand = null;
-    _needsRefresh = true;
-    _operand1Active = true;
-    _operand1Shown = true;
+    needsRefresh = true;
+    operand1Active = true;
+    operand1Shown = true;
   };
 
   const lolClear = () => {
-    _display("L");
-    setTimeout(_display("O", "additive"), 100);
-    setTimeout(_display("L", "additive"), 200);
-    setTimeout(_display("O", "additive"), 300);
-    setTimeout(_display("L", "additive"), 400);
-    setTimeout(_display("O", "additive"), 500);
-    setTimeout(_display("L", "additive"), 600);
-    setTimeout(_display("O", "additive"), 700);
-    setTimeout(_display("L", "additive"), 800);
+    display("L");
+    setTimeout(display(`${display()}O`), 100);
+    setTimeout(display(`${display()}L`), 200);
+    setTimeout(display(`${display()}O`), 300);
+    setTimeout(display(`${display()}L`), 400);
+    setTimeout(display(`${display()}O`), 500);
+    setTimeout(display(`${display()}L`), 600);
+    setTimeout(display(`${display()}O`), 700);
+    setTimeout(display(`${display()}L`), 800);
     setTimeout(clear(), 900);
   };
 
   const appendDigit = (d) => {
     function stepOne(nextStep) {
-      if (_needsRefresh) {
-        _display(d);
-        if (_display() !== "0") _needsRefresh = false;
+      if (needsRefresh) {
+        display(d);
+        if (display() !== "0") needsRefresh = false;
       } else {
-        _display(d, "additive");
+        display(`${display() + d}`);
       }
       nextStep();
     }
 
     function stepTwo() {
-      if (_operand1Active) {
-        ops.firstOperand = _display();
+      if (operand1Active) {
+        ops.firstOperand = display();
         ops.secondOperand = null;
       } else {
-        ops.secondOperand = _display();
-        _operand1Shown = false;
+        ops.secondOperand = display();
+        operand1Shown = false;
       }
     }
 
@@ -187,11 +120,11 @@ const screen = (() => {
 
   const appendPoint = () => {
     function stepOne(nextStep) {
-      if (_needsRefresh) {
-        _display("0.");
-        _needsRefresh = false;
-      } else if (!_display().includes(".")) {
-        _display(".", "additive");
+      if (needsRefresh) {
+        display("0.");
+        needsRefresh = false;
+      } else if (!display().includes(".")) {
+        display(`${display}.`);
       } else {
         return;
       }
@@ -199,12 +132,12 @@ const screen = (() => {
     }
 
     function stepTwo() {
-      if (_operand1Active) {
-        ops.firstOperand = _display().slice(0, -1);
+      if (operand1Active) {
+        ops.firstOperand = display().slice(0, -1);
         ops.secondOperand = null;
       } else {
-        ops.secondOperand = _display().slice(0, -1);
-        _operand1Shown = false;
+        ops.secondOperand = display().slice(0, -1);
+        operand1Shown = false;
       }
     }
 
@@ -213,20 +146,20 @@ const screen = (() => {
 
   const backspace = () => {
     function stepOne(nextStep) {
-      if (_operand1Active && _needsRefresh) {
+      if (operand1Active && needsRefresh) {
         clear();
         return;
       } 
 
-      if (_display() !== "0") {
+      if (display() !== "0") {
         if (
-          !_display().includes("-") && _display().length === 1 ||
-           _display().includes("-") && _display().length === 2
+          !display().includes("-") && display().length === 1 ||
+           display().includes("-") && display().length === 2
         ) {
-          _display("0");
-          _needsRefresh = true;
+          display("0");
+          needsRefresh = true;
         } else {
-          _display(_display().slice(0, -1));
+          display(display().slice(0, -1));
         }
       }
 
@@ -234,10 +167,10 @@ const screen = (() => {
     }
 
     function stepTwo() {
-      if (_operand1Shown) {
-        ops.firstOperand = _display();
+      if (operand1Shown) {
+        ops.firstOperand = display();
       } else {
-        ops.secondOperand = _display();
+        ops.secondOperand = display();
       }
     }
 
@@ -245,64 +178,83 @@ const screen = (() => {
   };
 
   const toggleSign = () => {
-    if (_display()[0] !== "-") {
-      _display(`-${_display}`);
+    if (display()[0] !== "-") {
+      display(`-${display()}`);
     } else {
-      _display(_display().slice(1));
+      display(display().slice(1));
     }
   };
 
-  document.addEventListener("hitEquals", (e) => {
-    _display(ops.evaluate());
-    ops.firstOperand = _display();
-    needsRefresh = true;
-    _operand1Active = true;
-    _operand1Shown = true;
-  });
-
-  document.addEventListener("hitClear", (e) => {
-    clear();
-  });
-
-  document.addEventListener("hitDelete", (e) => {
-    backspace();
-  });
-
-  document.addEventListener("hitDigit", (e) => {
-    appendDigit(e.detail);
-  });
-
-  document.addEventListener("hitPoint", (e) => {
-    appendPoint();
-  });
-
-  document.addEventListener("hitSign", (e) => {
-    toggleSign();
-  });
-
-  document.addEventListener("hitOperator", (e) => {
+  const handleOperator = (operator) => {
     function stepOne(nextStep) {
-      if (!_operand1Shown) {
-        _display(ops.evaluate());
-        ops.firstOperand = _display();
-      } else if (_operand1Active) {
+      if (!operand1Shown) {
+        if (ops.evaluate() === null) {
+          lolClear();
+          return;
+        } else { 
+          display(ops.evaluate());
+          ops.firstOperand = display();
+        }
+      } else if (operand1Active) {
         ops.secondOperand = null;
       }
       nextStep();
     }
     
     function stepTwo() {
-      _operand1Shown = true;
-      _operand1Active = false;
-      _needsRefresh = true;
-      const hitOperator2 = new Event("hitOperator2", { detail: e.detail });
-      document.dispatchEvent(hitOperator2);
+      operand1Shown = true;
+      operand1Active = false;
+      needsRefresh = true;
+      ops.currentOperator = operator;
     }
 
     stepOne(stepTwo);
-  });
+  };
 
-  return { lolClear };
+  const evaluate = () => {
+    if (ops.evaluate === null) {
+      lolClear();
+    } else {
+      display(ops.evaluate());
+      ops.firstOperand = display();
+      needsRefresh = true;
+      operand1Active = true;
+      operand1Shown = true;
+    }
+  };
+
+  const events = (e) => {
+    if (e.target.closest("button").id === "equals") {
+      evaluate();
+      return;
+    }
+    if (e.target.closest("button").id === "clear") {
+      clear();
+      return;
+    }
+    if (e.target.closest("button").id === "delete") {
+      backspace();
+      return;
+    }
+    if (e.target.closest("button").classList.contains("digit")) {
+      appendDigit(e.target.closest("button").id);
+      return;
+    }
+    if (e.target.closest("button").id === "point") {
+      appendPoint();
+      return;
+    }
+    if (e.target.closest("button").classList.contains("operator")) {
+      handleOperator(e.target.closest("button").id);
+      return;
+    }
+    if (e.target.closest("button").id === "sign") {
+      toggleSign();
+    }
+  };
+
+  const buttons = document.getElementById("buttons");
+  buttons.addEventListener("click", events);
 })();
 
 // let firstOperand;
