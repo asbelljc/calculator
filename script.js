@@ -33,8 +33,8 @@
 
   const evaluate = () => {
     if (secondOperand) {
-      firstOperand = parseInt(firstOperand);
-      secondOperand = parseInt(secondOperand);
+      firstOperand = Number(firstOperand);
+      secondOperand = Number(secondOperand);
       switch (currentOperator) {
         case "add":
           return add(firstOperand, secondOperand);
@@ -130,7 +130,7 @@
         display("0.");
         needsRefresh = false;
       } else if (!display().includes(".")) {
-        display(`${display}.`);
+        display(`${display()}.`);
       } else {
         return;
       }
