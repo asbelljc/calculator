@@ -299,7 +299,7 @@ const screen = (() => {
     stepOne(stepTwo);
   };
 
-  const EQUALS = () => {
+  const evaluate = () => {
     if (ops.evaluate() === null) {
       lolClear();
     } else {
@@ -316,7 +316,7 @@ const screen = (() => {
       return;
     }
     if (e.target.closest("button").id === "equals") {
-      EQUALS();
+      evaluate();
       return;
     }
     if (e.target.closest("button").id === "clear") {
