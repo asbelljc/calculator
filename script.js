@@ -31,22 +31,81 @@ const ops = (() => {
     }
   };
 
+  const round = (num) => {
+    // get number of digits after decimal point
+    let i = num.slice(num.indexOf(".") + 1).length;
+    // round number to fewer and fewer decimal places until it fits or you run out
+    while (i > 0 && num.length > 10) {
+      num = Number(num).toFixed(i - 1);
+      i--;
+    }
+    return num;
+  };
+
+  const toScientific = (num) => {
+    // put number in scientific notation to 4 decimal places
+    num = Number(num).toExponential(4);
+    // cut off trailing zeroes/point if needed, 
+    // e.g. 1.0300e+5 becomes 1.03e+5 and 1.0000e+5 becomes 1e+5
+    while (num[num.indexOf("e") - 1] === "0" || num[num.indexOf("e") - 1] === ".") {
+      num = num.slice(0, num.indexOf("e") - 1) + num.slice(num.indexOf("e"));
+    }
+    return num;
+  };
+
+  const makeFit = (num) => {
+    num = num.toString();
+    
+    if (num === "Infinity" || num === "-Infinity") {
+      return null;
+    }
+    // if the number is long...
+    if (num[0] === "-" && num.length > 11 || num[0] !== "-" && num.length > 10) {
+      // ...if it's not too big or too small, round it...
+      if (Math.abs(num) > 0.00000001 && Math.abs(num) < 9999999999) {
+        num = round(num);
+        // ...otherwise put it in scientific notation
+      } else {
+        num = toScientific(num);
+      }
+      // check it again and if it still fails return null
+      if (
+        num === "Infinity" ||
+        num === "-Infinity" ||
+        num[0] === "-" && num.length > 11 || 
+        num[0] !== "-" && num.length > 10
+      ) {
+        return null;
+      }
+    }
+
+    return num;
+  };
+
   const evaluate = () => {
     if (ops.secondOperand !== null) {
       ops.firstOperand = Number(ops.firstOperand);
       ops.secondOperand = Number(ops.secondOperand);
+      let result;
+
       switch (ops.currentOperator) {
         case "add":
-          return add(ops.firstOperand, ops.secondOperand);
+          result = add(ops.firstOperand, ops.secondOperand);
+          break;
         case "subtract":
-          return subtract(ops.firstOperand, ops.secondOperand);
+          result = subtract(ops.firstOperand, ops.secondOperand);
+          break;
         case "multiply":
-          return multiply(ops.firstOperand, ops.secondOperand);
+          result = multiply(ops.firstOperand, ops.secondOperand);
+          break;
         case "divide":
-          return divide(ops.firstOperand, ops.secondOperand);
+          result = divide(ops.firstOperand, ops.secondOperand);
+          break;
         case "power":
-          return power(ops.firstOperand, ops.secondOperand);
+          result = power(ops.firstOperand, ops.secondOperand);
       }
+
+      return result !== null ? makeFit(result) : result;
     }
   };
 
@@ -62,10 +121,12 @@ const screen = (() => {
   let needsRefresh = true;
   let operand1Shown = true;
   let operand1Active = true;
+  const buttons = document.getElementById("buttons");
+  buttons.addEventListener("click", events);
   
-  const display = (string = null) => {
-    if (string !== null) {
-      document.getElementById("screen").firstChild.innerText = string;
+  const display = (num = null) => {
+    if (num !== null) {
+        document.getElementById("screen").firstChild.innerText = /*roundCheck(*/num/*)*/;
     } else {
       return document.getElementById("screen").firstChild.innerText;
     }
@@ -81,6 +142,12 @@ const screen = (() => {
   };
 
   const lolClear = () => {
+    // temporarily disable click listener while lolClear is running
+    buttons.removeEventListener("click", events);
+    setTimeout(() => {
+      buttons.addEventListener("click", events);
+    }, 1300);
+
     function appendL() {
       display(`${display()}L`)
     }
@@ -105,7 +172,7 @@ const screen = (() => {
       if (needsRefresh) {
         display(d);
         if (display() !== "0") needsRefresh = false;
-      } else {
+      } else if (display().length <= 9) {
         display(`${display() + d}`);
       }
       nextStep();
@@ -129,7 +196,7 @@ const screen = (() => {
       if (needsRefresh) {
         display("0.");
         needsRefresh = false;
-      } else if (!display().includes(".")) {
+      } else if (!display().includes(".") && display().length <= 9) {
         display(`${display()}.`);
       } else {
         return;
@@ -244,7 +311,10 @@ const screen = (() => {
     }
   };
 
-  const events = (e) => {
+  function events(e) {
+    if (e.target.closest("button") === null) {
+      return;
+    }
     if (e.target.closest("button").id === "equals") {
       EQUALS();
       return;
@@ -272,260 +342,5 @@ const screen = (() => {
     if (e.target.closest("button").id === "sign") {
       toggleSign();
     }
-  };
-
-  const buttons = document.getElementById("buttons");
-  buttons.addEventListener("click", events);
-
-  return {
-    display
-  };
+  }
 })();
-
-// let firstOperand;
-// let secondOperand;
-// let currentOperator;
-// let screen = document.getElementById("screen").firstChild;
-// let needsRefresh = false;
-// let awaitingNumber = false;
-
-// const buttons = document.getElementById("buttons");
-
-// buttons.addEventListener("click", e => {
-//   if (e.target.closest("button").classList.contains("digit")) {
-//     enterDigit(e);
-//   } else if (e.target.closest("button").classList.contains("operator")) {
-//     setOperator(e);
-//   } else if (e.target.closest("button").id === "equals") {
-//     evaluate();
-//   }
-// });
-
-// function enterDigit(e) {
-//   if (e.target.closest("button").id === "0") {
-//     if (needsRefresh) {
-//       screen.textContent = "0";
-//       needsRefresh = false;
-//     } else if (screen.textContent !== "0") {
-
-//     }
-//     secondOperand = "";
-//   } else {
-//     if (screen.textContent === "0" || needsRefresh) {
-//       screen.textContent = e.target.closest("button").id;
-//       needsRefresh = false;
-//     } else {
-//       screen.textContent += e.target.closest("button").id;
-//     }
-//   }
-// }
-
-// function setOperator(e) {
-//   let clickedOperator = e.target.closest("button").id;
-  
-// }
-
-// function evaluate() {
-//   if (!secondOperand) {
-//     secondOperand = screen.textContent;
-//   }
-//   screen.textContent = operate(currentOperator, firstOperand, secondOperand);
-//   firstOperand = screen.textContent;
-//   needsRefresh = true;
-// }
-
-// buttons.addEventListener("click", e => {
-//   switch (e.target.closest("button").id) {
-//     case "0":
-//       if (screen.textContent !== "0") {
-//         screen.textContent += "0";
-//       }
-//       secondOperand = "";
-//       awaitingNumber = false;
-//       break;
-//     case "1":
-//       if (screen.textContent === "0" || needsRefresh) {
-//         screen.textContent = "1";
-//         needsRefresh = false;
-//       } else {
-//         screen.textContent += "1";
-//       }
-//       awaitingNumber = false;
-//       break;
-//     case "2":
-//       if (screen.textContent === "0" || needsRefresh) {
-//         screen.textContent = "2";
-//         needsRefresh = false;
-//       } else {
-//         screen.textContent += "2";
-//       }
-//       awaitingNumber = false;
-//       break;
-//     case "3":
-//       if (screen.textContent === "0" || needsRefresh) {
-//         screen.textContent = "3";
-//         needsRefresh = false;
-//       } else {
-//         screen.textContent += "3";
-//       }
-//       awaitingNumber = false;
-//       break;
-//     case "4":
-//       if (screen.textContent === "0" || needsRefresh) {
-//         screen.textContent = "4";
-//         needsRefresh = false;
-//       } else {
-//         screen.textContent += "4";
-//       }
-//       awaitingNumber = false;
-//       break;
-//     case "5":
-//       if (screen.textContent === "0" || needsRefresh) {
-//         screen.textContent = "5";
-//         needsRefresh = false;
-//       } else {
-//         screen.textContent += "5";
-//       }
-//       awaitingNumber = false;
-//       break;
-//     case "6":
-//       if (screen.textContent === "0" || needsRefresh) {
-//         screen.textContent = "6";
-//         needsRefresh = false;
-//       } else {
-//         screen.textContent += "6";
-//       }
-//       awaitingNumber = false;
-//       break;
-//     case "7":
-//       if (screen.textContent === "0" || needsRefresh) {
-//         screen.textContent = "7";
-//         needsRefresh = false;
-//       } else {
-//         screen.textContent += "7";
-//       }
-//       awaitingNumber = false;
-//       break;
-//     case "8":
-//       if (screen.textContent === "0" || needsRefresh) {
-//         screen.textContent = "8";
-//         needsRefresh = false;
-//       } else {
-//         screen.textContent += "8";
-//       }
-//       awaitingNumber = false;
-//       break;
-//     case "9":
-//       if (screen.textContent === "0" || needsRefresh) {
-//         screen.textContent = "9";
-//         needsRefresh = false;
-//       } else {
-//         screen.textContent += "9";
-//       }
-//       awaitingNumber = false;
-//       break;
-//     case "point":
-//       if (!screen.textContent.includes(".")) {
-//         screen.textContent += ".";
-//       }
-//       break;
-//     case "equals":
-//       if (!secondOperand) {
-//         secondOperand = screen.textContent;
-//       }
-//       screen.textContent = operate(currentOperator, firstOperand, secondOperand);
-//       firstOperand = screen.textContent;
-//       needsRefresh = true;
-//       break;
-//     case "add":
-//       if (!firstOperand) {
-//         firstOperand = screen.textContent;
-//         currentOperator = add;
-//       } else if (awaitingNumber) {
-//         currentOperator = add;
-//       } else {
-//         secondOperand = screen.textContent;
-//         screen.textContent = operate(currentOperator, firstOperand, secondOperand);
-//         firstOperand = screen.textContent;
-//         currentOperator = add;
-//       }
-//       awaitingNumber = true;
-//       needsRefresh = true;
-//       break;
-//     case "subtract":
-//       if (!firstOperand) {
-//         firstOperand = screen.textContent;
-//         currentOperator = subtract;
-//       } else if (awaitingNumber) {
-//         currentOperator = subtract;
-//       } else {
-//         secondOperand = screen.textContent;
-//         screen.textContent = operate(currentOperator, firstOperand, secondOperand);
-//         firstOperand = screen.textContent;
-//         currentOperator = subtract;
-//       }
-//       awaitingNumber = true;
-//       needsRefresh = true;
-//       break;
-//     case "multiply":
-//       if (!firstOperand) {
-//         firstOperand = screen.textContent;
-//         currentOperator = multiply;
-//       } else if (awaitingNumber) {
-//         currentOperator = multiply;
-//       } else {
-//         secondOperand = screen.textContent;
-//         screen.textContent = operate(currentOperator, firstOperand, secondOperand);
-//         firstOperand = screen.textContent;
-//         currentOperator = multiply;
-//       }
-//       awaitingNumber = true;
-//       needsRefresh = true;
-//       break;
-//     case "divide":
-//       if (!firstOperand) {
-//         firstOperand = screen.textContent;
-//         currentOperator = divide;
-//       } else if (awaitingNumber) {
-//         currentOperator = divide; 
-//       } else {
-//         secondOperand = screen.textContent;
-//         screen.textContent = operate(currentOperator, firstOperand, secondOperand);
-//         firstOperand = screen.textContent;
-//         currentOperator = divide;
-//       }
-//       awaitingNumber = true;
-//       needsRefresh = true;
-//       break;
-//     case "sign":
-//       break;
-//     case "power":
-//       break;
-//     case "delete":
-//       break;
-//     case "clear":
-//       break;
-//     }
-// });
-
-// 1. check if DIGIT/POINT, OPERATOR, SIGN, DELETE, or CLEAR pressed
-
-// 2. if DIGIT/POINT
-//    --if preceded by digit/point, screen.textContent += DIGIT/POINT,
-//        else screen.textContent = "" += DIGIT/POINT
-//    --must ignore point if repeated before new number entry
-
-// 3. if OPERATOR
-//    --if an operation is already waiting to be evaluated, screen.textContent = [result]
-//    --store the OPERATOR, store current screen.textContent as num1 and await second number
-//
-
-// 4. if SIGN
-//    --if screen.textContent != 0, screen.textContent = -screen.textContent
-
-// 5. if DELETE
-//    --if screen.textContent.length = 1, screen.textContent = 0,
-//        else screen.textContent.slice(0, -1)
-
-// 6. if CLEAR
-//    --
