@@ -61,6 +61,10 @@ button {
   transition: filter 0.2s;
 }
 
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
 .front {
   display: flex;
   justify-content: center;
@@ -71,6 +75,10 @@ button {
   border-radius: 15px;
   z-index: 1;
   transition: transform 50ms;
+}
+
+.front:active {
+  transform: translate(2px, 2px);
 }
 
 .gray-btn .front {
@@ -151,15 +159,19 @@ button {
   transform: translateY(1px);
 }
 
-button:hover {
-  cursor: pointer;
-  filter: brightness(1.1);
+/* stops sticky hover effects on mobile */
+@media (hover: hover) and (pointer: fine) {
+  button:hover {
+    cursor: pointer;
+    filter: brightness(1.1);
+  }
 }
 
-button:focus:not(:focus-visible) {
-  outline: none;
-}
-
-.front:active {
-  transform: translate(2px, 2px);
+/* stops tap highlighting on mobile */
+input,
+textarea,
+button,
+select,
+a {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
