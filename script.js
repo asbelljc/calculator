@@ -122,7 +122,8 @@ const screen = (() => {
   let operand1Shown = true;
   let operand1Active = true;
   const buttons = document.getElementById("buttons");
-  buttons.addEventListener("click", events);
+  buttons.addEventListener("click", clickEvents);
+  document.addEventListener("keydown", keyEvents);
   
   const display = (num = null) => {
     if (num !== null) {
@@ -142,10 +143,12 @@ const screen = (() => {
   };
 
   const lolClear = () => {
-    // temporarily disable click listener while lolClear is running
-    buttons.removeEventListener("click", events);
+    // temporarily disable event listeners while lolClear is running
+    buttons.removeEventListener("click", clickEvents);
+    document.removeEventListener("keydown", keyEvents);
     setTimeout(() => {
-      buttons.addEventListener("click", events);
+      buttons.addEventListener("click", clickEvents);
+      document.addEventListener("keydown", keyEvents);
     }, 1300);
 
     function appendL() {
@@ -311,7 +314,21 @@ const screen = (() => {
     }
   };
 
-  function events(e) {
+  function keyEvents(e) {
+    if (e.key === "Enter" || e.key === "=")  evaluate();
+    if (e.key === "Escape" || e.key === "c") clear();
+    if (e.key === "Backspace")               backspace();
+    if (e.key >= 0 && e.key <= 9)            appendDigit(`${e.key}`);
+    if (e.key === ".")                       appendPoint();
+    if (e.key === "+")                       handleOperator("add");
+    if (e.key === "-")                       handleOperator("subtract");
+    if (e.key === "*" || e.key === "x")      handleOperator("multiply");
+    if (e.key === "/")                       handleOperator("divide");
+    if (e.key === "^" || e.key === "p")      handleOperator("power");
+    if (e.key === "n")                       toggleSign();
+  }
+
+  function clickEvents(e) {
     if (e.target.closest("button") === null) {
       return;
     }
